@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Video full màn hình với Controls</title>
+  <style>
+    html,body { height:100%; margin:0; display:flex; align-items:center; justify-content:center; background:#000; }
+    .video-wrap {
+      width:100%;
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    video.fullscreen-player {
+      width:100%;
+      height:100%;
+      object-fit: contain; /* hoặc cover nếu muốn phủ toàn màn hình */
+      background:black;
+    }
+    .controls {
+      position: fixed; top:10px; right:10px; z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-wrap">
+    <video id="player" class="fullscreen-player" controls playsinline preload="metadata">
+      <source src="vid.mp4" type="video/mp4">
+      Trình duyệt không hỗ trợ thẻ video.
+    </video>
+  </div>
+
+  <div class="controls">
+    <button id="enterFs">Vào Fullscreen</button>
+  </div>
+
+  <script>
+    const player = document.getElementById('player');
+    const enterFs = document.getElementById('enterFs');
+    const exitFs = document.getElementById('exitFs');
+
+    enterFs.addEventListener('click', async () => {
+      try {
+        if (player.requestFullscreen) {
+          await player.requestFullscreen();
+        } else if (player.webkitRequestFullscreen) {
+          player.webkitRequestFullscreen();
+        } else if (player.msRequestFullscreen) {
+          player.msRequestFullscreen();
+        }
+      } catch (err) {
+        console.warn('Không thể vào fullscreen:', err);
+      }
+    });
+
+    exitFs.addEventListener('click', async () => {
+      try {
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        }
+      } catch (err) {
+        console.warn('Không thể thoát fullscreen:', err);
+      }
+    });
+  </script>
+</body>
+</html>
